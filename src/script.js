@@ -1,5 +1,7 @@
 
+import './style.css';
 import * as THREE from 'three';
+import gsap from 'gsap';
 // Scene
 const scene = new THREE.Scene();
 const axis = new THREE.AxesHelper( 5 );
@@ -46,6 +48,47 @@ const canvas = document.querySelector('.webgl');
 // console.log(canvas);
 const renderer = new THREE.WebGLRenderer({canvas});
 renderer.setSize(sizes.width, sizes.height);
-renderer.render(scene, camera);
 
 // Scene, Object/Model, Camera, Renderer
+//Animation
+// To solve frame per second problem of devices use time
+// One way to do this is using Date.now() difference see steps (1), (2) and (3): 
+// 1. let time = Date.now();
+
+// other way of doinf it is by using THREE.Clock() see steps (I) and (II)
+
+// I. 
+// const clock= new THREE.Clock(); 
+
+// We can also use libraries for animation like gsap. Gsap has its own so
+//  requestAnimationFrame so we don't need to specify it in the tick 
+
+gsap.to(cube1.position, {duration:1, delay:1, x:2})
+gsap.to(cube1.position, {duration:1, delay:2, x:0})
+gsap.to(cube1.position, {duration:1, delay:3, x:1})
+gsap.to(cube2.rotation, {duration:1, delay:1, z:2})
+gsap.to(cube2.scale, {duration:1, delay:2, z:2})
+gsap.to(cube1.rotation, {duration:1, delay:3, y:1})
+
+const tick = () => {
+    // 2. Difference
+    // const currentTime = Date.now();
+    // const deltaTime = currentTime - time;
+    // time = currentTime;
+    // 3. group.position.x += deltaTime * 0.001;
+    //    group.rotation.y += deltaTime * 0.001;
+
+// II.
+// const elapsedTime = clock.getElapsedTime();
+// cube1.position.x = Math.cos(elapsedTime);
+// cube2.rotation.y = Math.sin(elapsedTime);
+// cube3.scale.y = Math.tan(elapsedTime);
+// camera.lookAt(cube1.position);
+ 
+
+
+ renderer.render(scene, camera);
+ window.requestAnimationFrame(tick);
+}
+
+tick();
