@@ -6,6 +6,15 @@ import gsap from 'gsap';
 const scene = new THREE.Scene();
 const axis = new THREE.AxesHelper( 5 );
 scene.add(axis);
+
+const cursor = {
+    x:0,
+    y:0
+}
+window.addEventListener('mousemove', (event)=> {
+  cursor.x = event.clientX / sizes.width - 0.5;
+  cursor.y = -(event.clientY / sizes.height - 0.5);
+})
 // Cube
 
 // const shape = new THREE.BoxGeometry(1,1,1);
@@ -38,10 +47,15 @@ group.rotation.reorder('YXZ');
 group.rotation.set(1,1,1);
 // group.position.normalize();
 //Renderer
+
+// OrthographicCamera
+// const aspecRatio = sizes.width/sizes.height;
+// const a = 2;
+// const camera = new THREE.OrthographicCamera(-a*aspecRatio,a*aspecRatio,a,-a,0.1,200);
 const camera = new THREE.PerspectiveCamera(75, sizes.width/sizes.height);
 camera.position.z = 6;
-camera.position.x = 3;
-camera.position.y = 1;
+// camera.position.x = 3;
+// camera.position.y = 1;
 camera.lookAt(group.position);
 scene.add(camera);
 const canvas = document.querySelector('.webgl');
@@ -63,12 +77,12 @@ renderer.setSize(sizes.width, sizes.height);
 // We can also use libraries for animation like gsap. Gsap has its own so
 //  requestAnimationFrame so we don't need to specify it in the tick 
 
-gsap.to(cube1.position, {duration:1, delay:1, x:2})
-gsap.to(cube1.position, {duration:1, delay:2, x:0})
-gsap.to(cube1.position, {duration:1, delay:3, x:1})
-gsap.to(cube2.rotation, {duration:1, delay:1, z:2})
-gsap.to(cube2.scale, {duration:1, delay:2, z:2})
-gsap.to(cube1.rotation, {duration:1, delay:3, y:1})
+// gsap.to(cube1.position, {duration:1, delay:1, x:2})
+// gsap.to(cube1.position, {duration:1, delay:2, x:0})
+// gsap.to(cube1.position, {duration:1, delay:3, x:1})
+// gsap.to(cube2.rotation, {duration:1, delay:1, z:2})
+// gsap.to(cube2.scale, {duration:1, delay:2, z:2})
+// gsap.to(cube1.rotation, {duration:1, delay:3, y:1})
 
 const tick = () => {
     // 2. Difference
@@ -85,8 +99,9 @@ const tick = () => {
 // cube3.scale.y = Math.tan(elapsedTime);
 // camera.lookAt(cube1.position);
  
-
-
+camera.position.x = cursor.x * 10;
+camera.position.y = cursor.y * 10;
+camera.lookAt(group.position)
  renderer.render(scene, camera);
  window.requestAnimationFrame(tick);
 }
