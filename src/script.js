@@ -1,6 +1,7 @@
 
 import './style.css';
 import * as THREE from 'three';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 import gsap from 'gsap';
 // Scene
 const scene = new THREE.Scene();
@@ -15,6 +16,8 @@ window.addEventListener('mousemove', (event)=> {
   cursor.x = event.clientX / sizes.width - 0.5;
   cursor.y = -(event.clientY / sizes.height - 0.5);
 })
+
+
 // Cube
 
 // const shape = new THREE.BoxGeometry(1,1,1);
@@ -39,8 +42,8 @@ cube2.position.set(2,2,1);
 const cube3 = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), new THREE.MeshBasicMaterial({color: 0x0000FF})); 
 cube3.position.set(3,3,1);
 group.add(cube1);
-group.add(cube2);
-group.add(cube3);
+// group.add(cube2);
+// group.add(cube3);
 scene.add(group);
 // group.position.y = 2;
 group.rotation.reorder('YXZ');
@@ -58,7 +61,13 @@ camera.position.z = 6;
 // camera.position.y = 1;
 camera.lookAt(group.position);
 scene.add(camera);
+
+
+// OrbitControls
+
 const canvas = document.querySelector('.webgl');
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
 // console.log(canvas);
 const renderer = new THREE.WebGLRenderer({canvas});
 renderer.setSize(sizes.width, sizes.height);
@@ -99,9 +108,12 @@ const tick = () => {
 // cube3.scale.y = Math.tan(elapsedTime);
 // camera.lookAt(cube1.position);
  
-camera.position.x = cursor.x * 10;
-camera.position.y = cursor.y * 10;
-camera.lookAt(group.position)
+// Add camera movement
+// camera.position.x = cursor.x * 10;
+// camera.position.y = cursor.y * 10;
+// camera.lookAt(group.position)
+controls.update();
+
  renderer.render(scene, camera);
  window.requestAnimationFrame(tick);
 }
