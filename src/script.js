@@ -2,7 +2,7 @@
 import './style.css';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
-import gsap from 'gsap';
+// import gsap from 'gsap';
 // Scene
 const scene = new THREE.Scene();
 const axis = new THREE.AxesHelper( 5 );
@@ -12,12 +12,42 @@ const cursor = {
     x:0,
     y:0
 }
-window.addEventListener('mousemove', (event)=> {
-  cursor.x = event.clientX / sizes.width - 0.5;
-  cursor.y = -(event.clientY / sizes.height - 0.5);
+// window.addEventListener('mousemove', (event)=> {
+//   cursor.x = event.clientX / sizes.width - 0.5;
+//   cursor.y = -(event.clientY / sizes.height - 0.5);
+// })
+
+window.addEventListener('resize', (event) => {
+    sizes.width = window.innerWidth;
+    sizes.height = window.innerHeight;
+
+    camera.aspect = sizes.width/ sizes.height;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(sizes.width, sizes.height)
+    renderer.pixelRatio(Math.min(window.devicePixelRatio),2);
 })
 
+window.addEventListener('dblclick', (event) => {
+    const fullscreenElement  = document.fullscreenElement || document.webkitFullscreenElement
 
+    if (!fullscreenElement){
+        if(canvas.requestFullscreen) {
+            canvas.requestFullscreen();
+        }
+        else if(canvas.webkitRequestFullscreen) {
+            canvas.webkitRequestFullscreen();
+        }
+    }
+    else {
+        if(document.exitFullscreen) {
+            document.exitFullscreen()
+        }
+        else if(document.webkitExitFullscreen) {
+            document.webkitExitFullscreen()
+        }
+    }
+})
 // Cube
 
 // const shape = new THREE.BoxGeometry(1,1,1);
@@ -28,8 +58,8 @@ window.addEventListener('mousemove', (event)=> {
 
 //Camera
 const sizes = {
-    width: 800,
-    height: 600
+    width: window.innerWidth,
+    height: window.innerHeight
 }
 
 
